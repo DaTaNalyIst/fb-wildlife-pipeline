@@ -1,0 +1,38 @@
+name: 1 — Prompt Factory
+
+on:
+  schedule:
+    # 8:00 AM EAT = 5:00 AM UTC
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-prompts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install google-generativeai
+
+      - name: Generate today's prompt batch
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python scripts/generate_prompts.py
+
+      - name: Commit prompt batch to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/prompts/
+          git diff --staged --quiet || git commit -m "chore: add prompt batch $(date +%Y-%m-%d)"
+          git push

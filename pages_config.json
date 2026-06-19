@@ -1,0 +1,31 @@
+{
+  "_comment": "DO NOT commit real tokens here. Add tokens as GitHub Secrets (FB_PAGE_TOKEN_1, etc). This file only stores page IDs and metadata.",
+  "pages": [
+    {
+      "index": 1,
+      "page_id": "REPLACE_WITH_YOUR_PAGE_ID_1",
+      "name": "Wildlife Camera POV",
+      "niche": "wildlife",
+      "secret_name": "FB_PAGE_TOKEN_1"
+    },
+    {
+      "index": 2,
+      "page_id": "REPLACE_WITH_YOUR_PAGE_ID_2",
+      "name": "Animal Explorer POV",
+      "niche": "wildlife",
+      "secret_name": "FB_PAGE_TOKEN_2"
+    },
+    {
+      "index": 3,
+      "page_id": "REPLACE_WITH_YOUR_PAGE_ID_3",
+      "name": "Ocean and Sky POV",
+      "niche": "wildlife",
+      "secret_name": "FB_PAGE_TOKEN_3"
+    }
+  ],
+  "booster": {
+    "page_id": "REPLACE_WITH_BOOSTER_PAGE_ID",
+    "secret_name": "FB_BOOSTER_TOKEN",
+    "min_followers": 50000
+  }
+}

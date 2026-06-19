@@ -1,0 +1,24 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Videos (large files — stored in GitHub Releases, not git)
+output/
+*.mp4
+*.mov
+*.avi
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs (committed via Actions bot, not manually)
+# data/post_log_*.json — allow these to be committed

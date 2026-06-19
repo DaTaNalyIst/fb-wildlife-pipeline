@@ -1,0 +1,47 @@
+name: 2 — Video Factory
+
+on:
+  schedule:
+    # 2:00 PM EAT = 11:00 AM UTC
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+    inputs:
+      max_videos:
+        description: 'Max videos to generate (default: 3 to control cost)'
+        default: '3'
+
+jobs:
+  generate-videos:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install google-genai requests
+
+      - name: Set today's date
+        run: echo "TODAY=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+
+      - name: Generate videos from today's prompts
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          MAX_VIDEOS: ${{ inputs.max_videos || '3' }}
+        run: python scripts/generate_videos.py
+
+      - name: Upload videos as Release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: videos-${{ env.TODAY }}
+          name: Videos ${{ env.TODAY }}
+          files: output/videos/*.mp4,output/videos/*manifest*.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,42 @@
+name: 4 — Boost Post (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      post_id:
+        description: 'Facebook Post ID to boost (format: pageID_postID)'
+        required: true
+      groups:
+        description: 'Comma-separated Group IDs to share into (max 3, optional)'
+        required: false
+        default: ''
+      check_views:
+        description: 'Print current view count before boosting?'
+        required: false
+        default: 'true'
+
+jobs:
+  boost:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Boost post
+        env:
+          FB_BOOSTER_TOKEN: ${{ secrets.FB_BOOSTER_TOKEN }}
+          FB_PAGE_TOKEN_1: ${{ secrets.FB_PAGE_TOKEN_1 }}
+        run: |
+          python scripts/boost_post.py \
+            --post-id "${{ inputs.post_id }}" \
+            --groups "${{ inputs.groups }}" \
+            ${{ inputs.check_views == 'true' && '--check-views' || '' }}
